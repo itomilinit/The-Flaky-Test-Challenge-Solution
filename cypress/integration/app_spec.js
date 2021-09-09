@@ -1,3 +1,5 @@
+import 'cypress-wait-until';
+
 describe('Sign Up', () => {
   it('Adds person to course', () => {
     cy.visit('/')
@@ -22,7 +24,14 @@ describe('Sign Up', () => {
     cy.get('input[type="submit"]')
       .click()
 
-    cy.get('li')
-      .should('contain', 'Some Name - some@email.com - core - git-it')
+    cy.waitUntil(() => 
+      Cypress.$('li').length > 0
+    , {
+      errorMsg: 'Waiting is too long',
+      timeout: 10000, 
+    }).then(() => {
+      cy.get('li')
+        .should('contain', 'Some Name - some@email.com - core - git-it')
+    });
   })
 })
